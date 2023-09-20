@@ -1,2 +1,2 @@
 # PIWM
-(T-XX) Dream to Drive with Predictive Individual World Model
+Dream to Drive with Predictive Individual World Model
