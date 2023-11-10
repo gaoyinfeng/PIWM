@@ -3,9 +3,23 @@ Implementation of the **PIWM** and **I-SIM simulator** based on [Interaction Dat
 
 [website_INTER]: http://www.interaction-dataset.com/
 
-- [Overall Framework]
-<img width="48%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.gif">
+- Overall Framework:
+<div align=center>
+<img width="75%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.png">
+</div>
+  
+- Detailed Structure of Models:
+<div align=center>  
+<img width="75%" src="https://github.com/gaoyinfeng/PIWM/blob/main/model details.png">
+</div>
 
 
-- [Detailed Structure of Models]
-<img width="48%" src="https://github.com/gaoyinfeng/PIWM/blob/main/model details.gif">
+
+## Acknowledgement
+We appreciate the following GitHub repos for their valuable code base or dataset:
+
+https://github.com/danijar/dreamerv3
+
+https://github.com/fzi-forschungszentrum-informatik/Lanelet2
+
+https://github.com/interaction-dataset/interaction-dataset
