@@ -3,14 +3,14 @@ Implementation of the **PIWM** and **I-SIM simulator** based on [Interaction Dat
 
 [website_INTER]: http://www.interaction-dataset.com/
 
-- Overall Framework and Differences from DreamerV3:
+- Overall Framework and Differences from Original Dreamer:
 <div align=center>
-<img width="75%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.png">
+<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.png">
 </div>
   
 - Detailed Structure of Models:
 <div align=center>  
-<img width="75%" src="https://github.com/gaoyinfeng/PIWM/blob/main/model details.png">
+<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/model details.png">
 </div>
 
 
