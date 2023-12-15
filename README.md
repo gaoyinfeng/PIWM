@@ -3,7 +3,7 @@ Implementation of the **PIWM** and **I-SIM simulator** based on [Interaction Dat
 
 [website_INTER]: http://www.interaction-dataset.com/
 
-- Overall Framework:
+- Overall Framework and Differences from DreamerV3:
 <div align=center>
 <img width="75%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.png">
 </div>
