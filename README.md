@@ -5,12 +5,12 @@ Implementation of the **PIWM** and **I-SIM simulator** based on [Interaction Dat
 
 - Overall Framework and Differences from Original Dreamer:
 <div align=center>
-<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/overall.png">
+<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/pics/overall.png">
 </div>
   
 - Detailed Structure of Models:
 <div align=center>  
-<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/model details.png">
+<img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/pics/detailed.png">
 </div>
 
 
