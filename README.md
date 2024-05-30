@@ -5,7 +5,7 @@ JAX implementation of the **PIWM**. PIWM is a novel model-based reinforcement le
 
 The simulation environment used in this work is [**I-SIM simulator**][website_ISIM], which is built upon [Interaction Dataset][website_INTER].
 
-We plan to release the codes after the paper is accepted!
+The paper has been accepted! We plan to release the codes in a month!
 
 [website_project]: https://sites.google.com/view/piwm
 [website_ISIM]: https://github.com/gaoyinfeng/I-SIM/
@@ -21,7 +21,9 @@ We plan to release the codes after the paper is accepted!
 <img width="85%" src="https://github.com/gaoyinfeng/PIWM/blob/main/pics/detailed.png">
 </div>
 
-
+## Catalog
+- [ ] Code & Checkpoints Release
+- [x] Initialization
 
 ## Acknowledgement
 We appreciate the following GitHub repos for their valuable code base or dataset:
