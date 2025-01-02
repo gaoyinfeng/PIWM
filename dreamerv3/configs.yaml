@@ -1,0 +1,316 @@
+defaults:
+
+  seed: 0
+  method: name
+  task: dummy_disc 
+  logdir: /dev/null
+  replay: uniform
+  replay_size: 1e6
+  replay_online: False
+  eval_dir: ''
+  filter: '.*'
+
+  jax:
+    platform: gpu
+    jit: True
+    precision: float16
+    prealloc: True
+    debug_nans: False
+    logical_cpus: 0
+    debug: False
+    policy_devices: [0]
+    train_devices: [0]
+    metrics_every: 10
+
+  run:
+    replay_style: chunk
+    script: train
+    steps: 1e10
+    expl_until: 0
+    log_every: 300
+    save_every: 900
+    eval_every: 1e6
+    eval_initial: True
+    eval_eps: 1
+    eval_samples: 1
+    train_ratio: 32.0
+    train_fill: 0
+    eval_fill: 0
+    
+    log_zeros: False
+    log_keys_video: [image]
+    log_keys_sum: '^$'
+    log_keys_mean: '(log_entropy)'
+    log_keys_max: '^$'
+    
+    from_checkpoint: ''
+    sync_every: 10
+    # actor_addr: 'tcp://127.0.0.1:5551'
+    actor_addr: 'ipc:///tmp/5561' 
+    # actor_addr: 'ipc:///tmp/5551'
+    actor_batch: 32
+
+  envs: {amount: 4, parallel: process, length: 0, reset: True, restart: True, discretize: 0, checks: False}
+  wrapper: {length: 0, reset: True, discretize: 0, checks: False}
+  env:
+    atari: {size: [64, 64], repeat: 4, sticky: True, gray: False, actions: all, lives: unused, noops: 0, resize: opencv}
+    dmlab: {size: [64, 64], repeat: 4, episodic: True}
+    minecraft: {size: [64, 64], break_speed: 100.0}
+    dmc: {size: [64, 64], repeat: 2, camera: -1}
+    loconav: {size: [64, 64], repeat: 2, camera: -1}
+    interaction: {map_name: DR_USA_Intersection_EP0, load_mode: vehicle, loader_type: prediction, state_frame: global, drive_as_record: False, continous_action: False, control_steering: False, max_steps: None, vdi_type: react, vdi_num: 5, vpi_num: 5, route_type: ground_truth, visualization: True, ghost_visualization: False, route_visualization: True, route_bound_visualization: False, port: 5561, only_trouble: False, eval: False, decoder_target: predict, predict_horizen: 20}
+
+  # Agent
+  task_behavior: Greedy
+  expl_behavior: None
+  batch_size: 16
+  batch_length: 64
+  data_loaders: 8
+
+  # World Model
+  decode_target: recon
+  grad_heads: [decoder, reward, cont]
+  rssm: {deter: 4096, units: 1024, stoch: 32, classes: 32, act: silu, norm: layer, initial: learned, unimix: 0.01, unroll: False, action_clip: 1.0, winit: normal, fan: avg}
+  encoder: {mlp_keys: '.*', cnn_keys: '.*', act: silu, norm: layer, mlp_layers: 5, mlp_units: 1024, cnn: resnet, cnn_depth: 96, cnn_blocks: 0, resize: stride, winit: normal, fan: avg, symlog_inputs: True, minres: 4}
+  decoder: {mlp_keys: '.*', cnn_keys: '.*', act: silu, norm: layer, mlp_layers: 5, mlp_units: 1024, cnn: resnet, cnn_depth: 96, cnn_blocks: 0, image_dist: mse, vector_dist: symlog_mse, inputs: [deter, stoch], resize: stride, winit: normal, fan: avg, outscale: 1.0, minres: 4, cnn_sigmoid: False}
+  reward_head: {layers: 5, units: 1024, act: silu, norm: layer, dist: symlog_disc, outscale: 0.0, outnorm: False, inputs: [deter, stoch], winit: normal, fan: avg, bins: 255}
+  cont_head: {layers: 5, units: 1024, act: silu, norm: layer, dist: binary, outscale: 1.0, outnorm: False, inputs: [deter, stoch], winit: normal, fan: avg}
+  attention: {layers: 1, heads: 2, units_per_head: 200, act: silu, norm: none, bias: False, outscale: 1.0, outnorm: False, inputs: [deter, stoch], winit: normal, fan: avg}
+  loss_scales: {image: 1.0, vector: 1.0, reward: 1.0, cont: 1.0, dyn: 0.5, rep: 0.1, actor: 1.0, critic: 1.0, slowreg: 1.0}
+  dyn_loss: {impl: kl, free: 1.0}
+  rep_loss: {impl: kl, free: 1.0}
+  model_opt: {opt: adam, lr: 1e-4, eps: 1e-8, clip: 1000.0, wd: 0.0, warmup: 0, lateclip: 0.0}
+
+  # Actor Critic
+  actor: {layers: 5, units: 1024, act: silu, norm: layer, minstd: 0.1, maxstd: 1.0, outscale: 1.0, outnorm: False, unimix: 0.01, inputs: [deter, stoch], winit: normal, fan: avg, symlog_inputs: False}
+  critic: {layers: 5, units: 1024, act: silu, norm: layer, dist: symlog_disc, outscale: 0.0, outnorm: False, inputs: [deter, stoch], winit: normal, fan: avg, bins: 255, symlog_inputs: False}
+  actor_opt: {opt: adam, lr: 3e-5, eps: 1e-5, clip: 100.0, wd: 0.0, warmup: 0, lateclip: 0.0}
+  critic_opt: {opt: adam, lr: 3e-5, eps: 1e-5, clip: 100.0, wd: 0.0, warmup: 0, lateclip: 0.0}
+  # different grad ways
+  actor_dist_disc: onehot
+  actor_dist_cont: normal
+  actor_grad_disc: reinforce
+  actor_grad_cont: backprop
+  critic_type: vfunction
+  imag_horizon: 15
+  imag_unroll: False
+  horizon: 333
+  return_lambda: 0.95
+  critic_slowreg: logprob
+  slow_critic_update: 1
+  slow_critic_fraction: 0.02
+  retnorm: {impl: perc_ema, decay: 0.99, max: 1.0, perclo: 5.0, perchi: 95.0}
+  actent: 3e-4
+
+  # Exploration
+  expl_rewards: {extr: 1.0, disag: 0.1}
+  expl_opt: {opt: adam, lr: 1e-4, eps: 1e-5, clip: 100.0, wd: 0.0, warmup: 0}
+  disag_head: {layers: 5, units: 1024, act: silu, norm: layer, dist: mse, outscale: 1.0, inputs: [deter, stoch, action], winit: normal, fan: avg}
+  disag_target: [stoch]
+  disag_models: 8
+
+
+interaction_prediction:
+
+  task: interaction_prediction
+  jax:
+    prealloc: False
+  run:
+    replay_style: ep
+    script: eval_only
+    # script: train 
+    steps: 5.1e5 # 10.1e5
+    eval_every: 5e8
+    log_every: 1000
+    
+    # 2024.12.23.14.40：small_scale_dataset test
+    # from_checkpoint: /home/zb/PIWM/python/interaction_dreamerv3/dreamerv3/logdir/20241223-test01/checkpoint_500k.ckpt
+
+    # 2024.12.25.09.39：large_scale_dataset test
+    from_checkpoint: /home/zb/PIWM/python/interaction_dreamerv3/dreamerv3/logdir/20241224-test01/checkpoint_500k.ckpt
+
+
+    # from_checkpoint: /home/gdg/NewDisc/MyPaperResources/[T-IV]Dream_to_Drive_with_PIWM/paper_models/comparison/small_set/PIM/8.21_paper_3/checkpoint_500k.ckpt
+    
+    #2024.10.17 19.23:
+    # from_checkpoint: /home/gdg/NewDisc/MyPaperResources/[T-IV]Dream_to_Drive_with_PIWM/paper_models/comparison/big_set/PIM/8.21_paper_dataset_3/checkpoint_500k.ckpt #原来执行的
+    # from_checkpoint: ''
+    #/home/zb/02_PIWM/Dream_to_Drive_with_PIWM/paper_models/comparison/big_set/20241017_test/checkpoint_500k.ckpt
+
+    # from_checkpoint: /home/gdg/InteractionRL/Dreamer_Inter/python/logdir/isim_intersection/dreamerv3/predict/12.23_7action_1raccweight_4/checkpoint_500k.ckpt
+    # from_checkpoint: /home/gdg/InteractionRL/Dreamer_Inter/python/logdir/isim_intersection/dreamerv3/3.28_vdi:vpi=9:1_5/checkpoint_500k.ckpt
+  env:
+    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: large_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: True, ghost_visualization: True}   
+    # 8888 loader_type: prediction、visualization: True
+  replay_size: 2e6
+
+  # Env num setting
+  envs.amount: 1
+  envs.parallel: none
+  
+  # Agent
+  batch_length: 50
+  
+  # World model
+  decode_target: predict
+  rssm: {deter: 200, units: 200, stoch: 16, classes: 16}
+  # TODO: encoder/decoder keys should be easy to change according to vdi_num and vpi num
+  encoder:
+      mlp_keys: __ENCODER_MLP_KEYS__
+      cnn_keys: '$^'
+      mlp_layers: 4
+      mlp_units: 200
+
+  decoder:
+      mlp_keys: __DECODER_MLP_KEYS__
+      cnn_keys: '$^'
+      mlp_layers: 4
+      mlp_units: 200
+
+  reward_head: {layers: 4, units: 400}
+  cont_head: {layers: 4, units: 400}
+  attention: {layers: 1, heads: 2, units_per_head: 200, bias: False}
+  model_opt.lr: 2e-4
+  
+  # Actor and Critic
+  actor: {layers: 4, units: 400}
+  critic: {layers: 4, units: 400}
+  actor_opt.lr: 4e-5
+  critic_opt.lr: 1e-4
+  actent: 1e-3
+
+
+
+atari:
+
+  task: atari_pong
+  envs.amount: 8
+  run:
+    steps: 5.5e7
+    eval_eps: 10
+    train_ratio: 64
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+
+crafter:
+
+  task: crafter_reward
+  envs.amount: 1
+  run:
+    log_keys_max: '^log_achievement_.*'
+    log_keys_sum: '^log_reward$'
+  run.train_ratio: 512
+  # rssm.deter: 1024
+  # .*\.cnn_depth: 48
+  # .*\.units: 640
+  # .*\.layers: 3
+  rssm.deter: 512
+  .*\.cnn_depth: 32
+  .*\.units: 512
+  .*\.layers: 2
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+
+
+dmc_vision:
+
+  task: dmc_walker_walk
+  run.train_ratio: 512
+  rssm.deter: 512
+  .*\.cnn_depth: 32
+  .*\.layers: 2
+  .*\.units: 512
+  encoder: {mlp_keys: '$^', cnn_keys: 'image'}
+  decoder: {mlp_keys: '$^', cnn_keys: 'image'}
+
+dmc_proprio:
+
+  task: dmc_walker_walk
+  run.train_ratio: 512
+  rssm.deter: 512
+  .*\.cnn_depth: 32
+  .*\.layers: 2
+  .*\.units: 512
+  encoder: {mlp_keys: '.*', cnn_keys: '$^'}
+  decoder: {mlp_keys: '.*', cnn_keys: '$^'}
+
+bsuite:
+
+  task: bsuite_mnist/0
+  envs: {amount: 1, parallel: none}
+  run:
+    script: train
+    train_ratio: 1024  # 128 for cartpole
+  rssm.deter: 512
+  .*\.cnn_depth: 32
+  .*\.layers: 2
+  .*\.units: 512
+
+loconav:
+
+  task: loconav_ant_maze_m
+  env.loconav.repeat: 2
+  run:
+    train_ratio: 512
+    log_keys_max: '^log_.*'
+  encoder: {mlp_keys: '.*', cnn_keys: 'image'}
+  decoder: {mlp_keys: '.*', cnn_keys: 'image'}
+
+small:
+  rssm.deter: 512
+  .*\.cnn_depth: 32
+  .*\.units: 512
+  .*\.layers: 2
+
+medium:
+  rssm.deter: 1024
+  .*\.cnn_depth: 48
+  .*\.units: 640
+  .*\.layers: 3
+
+large:
+  rssm.deter: 2048
+  .*\.cnn_depth: 64
+  .*\.units: 768
+  .*\.layers: 4
+
+xlarge:
+  rssm.deter: 4096
+  .*\.cnn_depth: 96
+  .*\.units: 1024
+  .*\.layers: 5
+
+multicpu:
+
+  jax:
+    logical_cpus: 8
+    policy_devices: [0, 1]
+    train_devices: [2, 3, 4, 5, 6, 7]
+  run:
+    actor_batch: 4
+  envs:
+    amount: 8
+  batch_size: 12
+  batch_length: 10
+
+debug:
+
+  jax: {jit: True, prealloc: False, debug: True, platform: cpu}
+  envs: {restart: False, amount: 3}
+  wrapper: {length: 100, checks: True}
+  run:
+    eval_every: 1000
+    log_every: 5
+    save_every: 10
+    train_ratio: 32
+    actor_batch: 2
+  batch_size: 8
+  batch_length: 12
+  replay_size: 1e5
+  encoder.cnn_depth: 8
+  decoder.cnn_depth: 8
+  rssm: {deter: 32, units: 16, stoch: 4, classes: 4}
+  .*unroll: False
+  .*\.layers: 2
+  .*\.units: 16
+  .*\.wd$: 0.0
