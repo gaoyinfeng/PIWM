@@ -1,0 +1,211 @@
+actent: 0.001
+actor:
+  act: silu
+  fan: avg
+  inputs: !!python/tuple [deter, stoch]
+  layers: 4
+  maxstd: 1.0
+  minstd: 0.1
+  norm: layer
+  outnorm: false
+  outscale: 1.0
+  symlog_inputs: false
+  unimix: 0.01
+  units: 400
+  winit: normal
+actor_dist_cont: normal
+actor_dist_disc: onehot
+actor_grad_cont: backprop
+actor_grad_disc: reinforce
+actor_opt: {clip: 100.0, eps: 1e-05, lateclip: 0.0, lr: 4e-05, opt: adam, warmup: 0,
+  wd: 0.0}
+attention:
+  act: silu
+  bias: false
+  fan: avg
+  heads: 2
+  inputs: !!python/tuple [deter, stoch]
+  layers: 1
+  norm: none
+  outnorm: false
+  outscale: 1.0
+  units_per_head: 200
+  winit: normal
+batch_length: 50
+batch_size: 16
+cont_head:
+  act: silu
+  dist: binary
+  fan: avg
+  inputs: !!python/tuple [deter, stoch]
+  layers: 4
+  norm: layer
+  outnorm: false
+  outscale: 1.0
+  units: 400
+  winit: normal
+critic:
+  act: silu
+  bins: 255
+  dist: symlog_disc
+  fan: avg
+  inputs: !!python/tuple [deter, stoch]
+  layers: 4
+  norm: layer
+  outnorm: false
+  outscale: 0.0
+  symlog_inputs: false
+  units: 400
+  winit: normal
+critic_opt: {clip: 100.0, eps: 1e-05, lateclip: 0.0, lr: 0.0001, opt: adam, warmup: 0,
+  wd: 0.0}
+critic_slowreg: logprob
+critic_type: vfunction
+data_loaders: 8
+decode_target: predict
+decoder:
+  act: silu
+  cnn: resnet
+  cnn_blocks: 0
+  cnn_depth: 96
+  cnn_keys: $^
+  cnn_sigmoid: false
+  fan: avg
+  image_dist: mse
+  inputs: !!python/tuple [deter, stoch]
+  minres: 4
+  mlp_keys: "['ego_prediction', 'npc_1_prediction', 'npc_2_prediction', 'npc_3_prediction',
+    'npc_4_prediction', 'npc_5_prediction']"
+  mlp_layers: 4
+  mlp_units: 200
+  norm: layer
+  outscale: 1.0
+  resize: stride
+  vector_dist: symlog_mse
+  winit: normal
+disag_head:
+  act: silu
+  dist: mse
+  fan: avg
+  inputs: !!python/tuple [deter, stoch, action]
+  layers: 5
+  norm: layer
+  outscale: 1.0
+  units: 1024
+  winit: normal
+disag_models: 8
+disag_target: !!python/tuple [stoch]
+dyn_loss: {free: 1.0, impl: kl}
+encoder: {act: silu, cnn: resnet, cnn_blocks: 0, cnn_depth: 96, cnn_keys: $^, fan: avg,
+  minres: 4, mlp_keys: "['ego', 'npc_1', 'npc_2', 'npc_3', 'npc_4', 'npc_5', 'other_1',
+    'other_2', 'other_3', 'other_4', 'other_5']", mlp_layers: 4, mlp_units: 200, norm: layer,
+  resize: stride, symlog_inputs: true, winit: normal}
+env:
+  atari:
+    actions: all
+    gray: false
+    lives: unused
+    noops: 0
+    repeat: 4
+    resize: opencv
+    size: !!python/tuple [64, 64]
+    sticky: true
+  dmc:
+    camera: -1
+    repeat: 2
+    size: !!python/tuple [64, 64]
+  dmlab:
+    episodic: true
+    repeat: 4
+    size: !!python/tuple [64, 64]
+  interaction: {continous_action: false, control_steering: false, decoder_target: predict,
+    drive_as_record: false, eval: false, ghost_visualization: true, load_mode: vehicle,
+    loader_type: dataset, map_name: DR_USA_Intersection_EP0, max_steps: None, npc_num: 5,
+    npc_type: record, only_trouble: false, other_num: 5, port: 8888, predict_horizen: 20,
+    route_bound_visualization: false, route_type: ground_truth, route_visualization: true,
+    state_frame: global, visualization: true}
+  loconav:
+    camera: -1
+    repeat: 2
+    size: !!python/tuple [64, 64]
+  minecraft:
+    break_speed: 100.0
+    size: !!python/tuple [64, 64]
+envs: {amount: 1, checks: false, discretize: 0, length: 0, parallel: none, reset: true,
+  restart: true}
+eval_dir: ''
+expl_behavior: None
+expl_opt: {clip: 100.0, eps: 1e-05, lr: 0.0001, opt: adam, warmup: 0, wd: 0.0}
+expl_rewards: {disag: 0.1, extr: 1.0}
+filter: .*
+grad_heads: !!python/tuple [decoder, reward, cont]
+horizon: 333
+imag_horizon: 15
+imag_unroll: false
+jax:
+  debug: false
+  debug_nans: false
+  jit: true
+  logical_cpus: 0
+  metrics_every: 10
+  platform: gpu
+  policy_devices: !!python/tuple [0]
+  prealloc: false
+  precision: float16
+  train_devices: !!python/tuple [0]
+logdir: 
+  /home/zb/02_PIWM/Dreamer_Inter/python/interaction_dreamerv3/dreamerv3/embodied/run
+loss_scales: {actor: 1.0, cont: 1.0, critic: 1.0, dyn: 0.5, image: 1.0, rep: 0.1,
+  reward: 1.0, slowreg: 1.0, vector: 1.0}
+method: name
+model_opt: {clip: 1000.0, eps: 1e-08, lateclip: 0.0, lr: 0.0002, opt: adam, warmup: 0,
+  wd: 0.0}
+rep_loss: {free: 1.0, impl: kl}
+replay: uniform
+replay_online: false
+replay_size: 2000000.0
+retnorm: {decay: 0.99, impl: perc_ema, max: 1.0, perchi: 95.0, perclo: 5.0}
+return_lambda: 0.95
+reward_head:
+  act: silu
+  bins: 255
+  dist: symlog_disc
+  fan: avg
+  inputs: !!python/tuple [deter, stoch]
+  layers: 4
+  norm: layer
+  outnorm: false
+  outscale: 0.0
+  units: 400
+  winit: normal
+rssm: {act: silu, action_clip: 1.0, classes: 16, deter: 200, fan: avg, initial: learned,
+  norm: layer, stoch: 16, unimix: 0.01, units: 200, unroll: false, winit: normal}
+run:
+  actor_addr: ipc:///tmp/5551
+  actor_batch: 32
+  eval_eps: 1
+  eval_every: 500000000.0
+  eval_fill: 0
+  eval_initial: true
+  eval_samples: 1
+  expl_until: 0
+  from_checkpoint: ''
+  log_every: 1000
+  log_keys_max: ^$
+  log_keys_mean: (log_entropy)
+  log_keys_sum: ^$
+  log_keys_video: !!python/tuple [image]
+  log_zeros: false
+  replay_style: ep
+  save_every: 900
+  script: train
+  steps: 510000.0
+  sync_every: 10
+  train_fill: 0
+  train_ratio: 32.0
+seed: 0
+slow_critic_fraction: 0.02
+slow_critic_update: 1
+task: interaction_prediction
+task_behavior: Greedy
+wrapper: {checks: false, discretize: 0, length: 0, reset: true}
