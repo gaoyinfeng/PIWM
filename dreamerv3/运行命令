@@ -1,5 +1,0 @@
-
-训练：
-python train.py --logdir xxxx --configs interaction_prediction --task interaction_prediction
-
-
