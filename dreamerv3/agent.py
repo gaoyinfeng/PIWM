@@ -15,7 +15,7 @@ logger.addFilter(CheckTypesFilter())
 from . import behaviors
 from . import jaxagent
 from . import jaxutils
-from . import nets_PIWM, nets_original, nets_branch
+from . import nets_PIWM
 from . import ninjax as nj
 
 
