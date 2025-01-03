@@ -45,9 +45,7 @@ defaults:
     
     from_checkpoint: ''
     sync_every: 10
-    # actor_addr: 'tcp://127.0.0.1:5551'
     actor_addr: 'ipc:///tmp/5561' 
-    # actor_addr: 'ipc:///tmp/5551'
     actor_batch: 32
 
   envs: {amount: 4, parallel: process, length: 0, reset: True, restart: True, discretize: 0, checks: False}
@@ -117,31 +115,17 @@ interaction_prediction:
     prealloc: False
   run:
     replay_style: ep
-    script: eval_only
-    # script: train 
-    steps: 5.1e5 # 10.1e5
+    # script: eval_only
+    cript: train 
+    steps: 5.1e5
     eval_every: 5e8
     log_every: 1000
-    
-    # 2024.12.23.14.40：small_scale_dataset test
-    # from_checkpoint: /home/zb/PIWM/python/interaction_dreamerv3/dreamerv3/logdir/20241223-test01/checkpoint_500k.ckpt
 
-    # 2024.12.25.09.39：large_scale_dataset test
-    from_checkpoint: /home/zb/PIWM/python/interaction_dreamerv3/dreamerv3/logdir/20241224-test01/checkpoint_500k.ckpt
+    # from_checkpoint: {checkpointdir/checkpoint.ckpt}
 
-
-    # from_checkpoint: /home/gdg/NewDisc/MyPaperResources/[T-IV]Dream_to_Drive_with_PIWM/paper_models/comparison/small_set/PIM/8.21_paper_3/checkpoint_500k.ckpt
-    
-    #2024.10.17 19.23:
-    # from_checkpoint: /home/gdg/NewDisc/MyPaperResources/[T-IV]Dream_to_Drive_with_PIWM/paper_models/comparison/big_set/PIM/8.21_paper_dataset_3/checkpoint_500k.ckpt #原来执行的
-    # from_checkpoint: ''
-    #/home/zb/02_PIWM/Dream_to_Drive_with_PIWM/paper_models/comparison/big_set/20241017_test/checkpoint_500k.ckpt
-
-    # from_checkpoint: /home/gdg/InteractionRL/Dreamer_Inter/python/logdir/isim_intersection/dreamerv3/predict/12.23_7action_1raccweight_4/checkpoint_500k.ckpt
-    # from_checkpoint: /home/gdg/InteractionRL/Dreamer_Inter/python/logdir/isim_intersection/dreamerv3/3.28_vdi:vpi=9:1_5/checkpoint_500k.ckpt
   env:
-    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: large_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: True, ghost_visualization: True}   
-    # 8888 loader_type: prediction、visualization: True
+    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: small_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: True, ghost_visualization: True}   
+
   replay_size: 2e6
 
   # Env num setting
@@ -154,7 +138,6 @@ interaction_prediction:
   # World model
   decode_target: predict
   rssm: {deter: 200, units: 200, stoch: 16, classes: 16}
-  # TODO: encoder/decoder keys should be easy to change according to vdi_num and vpi num
   encoder:
       mlp_keys: __ENCODER_MLP_KEYS__
       cnn_keys: '$^'
@@ -178,7 +161,6 @@ interaction_prediction:
   actor_opt.lr: 4e-5
   critic_opt.lr: 1e-4
   actent: 1e-3
-
 
 
 atari:

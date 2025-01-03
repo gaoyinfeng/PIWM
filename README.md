@@ -38,38 +38,6 @@ Install [JAX](https://github.com/google/jax#pip-installation-gpu-cuda) and then 
 pip install -U -r requirements.txt
 ```
 
-Training script:
-
-```shell
-python train.py --logdir {logdir} --configs interaction_prediction --task interaction_prediction
-```
-
-Modify  the `"script` in `dreamerv3/configs.yaml` and specify the `checkpoint` file to select training or testing:
-
-Train:
-
-```yaml
-script: eval_only
-```
-
-Test:
-
-```yaml
-script: eval_only
-```
-
-Specify the `checkpoint` file:
-
-```yaml
-from_checkpoint: {checkpoint_dir}/{checkpoint}.ckpt
-```
-
-Test scripts:
-
-```shell
-python train.py --logdir {logdir} --configs interaction_prediction --task interaction_prediction
-```
-
 Modify the `"loader_type"` in `dreamerv3/configs.yaml` to select training or testing for large-scale or small-scale scenarios:
 
 Large scale scenarios:
@@ -84,12 +52,42 @@ Small scale scenarios:
 loader_type: small_scale
 ```
 
+Modify  the `"script` in `dreamerv3/configs.yaml` to select  training:
+
+`"configs.yaml"`:
+
+```yaml
+script: train
+```
+
+`Training script`:
+
+```shell
+python train.py --logdir {logdir} --configs interaction_prediction --task interaction_prediction
+```
+
+Modify  the `"script` in `dreamerv3/configs.yaml` and specify the `checkpoint` file to select  testing:
+
+`"configs.yaml"`:
+
+```yaml
+script: eval_only
+...
+from_checkpoint: {checkpoint_dir}/{checkpoint}.ckpt
+```
+
+`Test scripts`:
+
+```shell
+python train.py --logdir {logdir} --configs interaction_prediction --task interaction_prediction
+```
+
 
 
 ## Catalog
 
-- [ ] Code & Checkpoints Release
-- [ ] Initialization
+- [x] Code & Checkpoints Release
+- [x] Initialization
 
 ## Acknowledgement
 We appreciate the following GitHub repos for their valuable code base or dataset:
