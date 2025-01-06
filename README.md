@@ -86,8 +86,8 @@ loader_type: small_scale
 
 ## Catalog
 
-- [ ] Code & Checkpoints Release
-- [ ] Initialization
+- [x] Code & Checkpoints Release
+- [x] Initialization
 
 ## Acknowledgement
 We appreciate the following GitHub repos for their valuable code base or dataset:
