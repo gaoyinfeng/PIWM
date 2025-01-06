@@ -82,12 +82,27 @@ Small scale scenarios:
 loader_type: small_scale
 ```
 
-
-
 ## Catalog
 
 - [x] Code & Checkpoints Release
 - [x] Initialization
+
+
+## Citation
+If you find PIWM useful in your research or applications, please consider giving us a star &#127775; and citing it by the following BibTeX entry.
+
+```BibTeX
+@article{gao2024piwm,
+  author={Gao, Yinfeng and Zhang, Qichao and Ding, Da-Wei and Zhao, Dongbin},
+  journal={IEEE Transactions on Intelligent Vehicles}, 
+  title={Dream to Drive With Predictive Individual World Model}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-16},
+  doi={10.1109/TIV.2024.3408830}}
+```
+
 
 ## Acknowledgement
 We appreciate the following GitHub repos for their valuable code base or dataset:
