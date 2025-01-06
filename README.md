@@ -108,7 +108,3 @@ If you find PIWM useful in your research or applications, please consider giving
 We appreciate the following GitHub repos for their valuable code base or dataset:
 
 https://github.com/danijar/dreamerv3
-
-https://github.com/fzi-forschungszentrum-informatik/Lanelet2
-
-https://github.com/interaction-dataset/interaction-dataset
