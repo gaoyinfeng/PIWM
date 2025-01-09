@@ -5,8 +5,6 @@ JAX implementation of the **PIWM**. PIWM is a novel model-based reinforcement le
 
 The simulation environment used in this work is [**I-SIM simulator**][website_ISIM], which is built upon [Interaction Dataset][website_INTER].
 
-The paper has been accepted! We plan to release the codes in a month!
-
 [website_project]: https://sites.google.com/view/piwm
 [website_ISIM]: https://github.com/gaoyinfeng/I-SIM/
 [website_INTER]: http://www.interaction-dataset.com/
@@ -82,18 +80,28 @@ from_checkpoint: {checkpoint_dir}/{checkpoint}.ckpt
 python train.py --logdir {logdir} --configs interaction_prediction --task interaction_prediction
 ```
 
-
-
 ## Catalog
 
 - [x] Code & Checkpoints Release
 - [x] Initialization
 
+
+## Citation
+If you find PIWM useful in your research or applications, please consider giving us a star &#127775; and citing it by the following BibTeX entry.
+
+```BibTeX
+@article{gao2024piwm,
+  author={Gao, Yinfeng and Zhang, Qichao and Ding, Da-Wei and Zhao, Dongbin},
+  journal={IEEE Transactions on Intelligent Vehicles}, 
+  title={Dream to Drive With Predictive Individual World Model}, 
+  year={2024},
+  volume={},
+  number={},
+  pages={1-16},
+  doi={10.1109/TIV.2024.3408830}}
+```
+
 ## Acknowledgement
 We appreciate the following GitHub repos for their valuable code base or dataset:
 
 https://github.com/danijar/dreamerv3
-
-https://github.com/fzi-forschungszentrum-informatik/Lanelet2
-
-https://github.com/interaction-dataset/interaction-dataset
