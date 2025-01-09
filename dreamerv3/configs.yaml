@@ -107,7 +107,6 @@ defaults:
   disag_target: [stoch]
   disag_models: 8
 
-
 interaction_prediction:
 
   task: interaction_prediction
@@ -116,7 +115,7 @@ interaction_prediction:
   run:
     replay_style: ep
     # script: eval_only
-    cript: train 
+    script: train 
     steps: 5.1e5
     eval_every: 5e8
     log_every: 1000
@@ -124,7 +123,7 @@ interaction_prediction:
     # from_checkpoint: {checkpointdir/checkpoint.ckpt}
 
   env:
-    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: small_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: True, ghost_visualization: True}   
+    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: small_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: False, ghost_visualization: True}   
 
   replay_size: 2e6
 
