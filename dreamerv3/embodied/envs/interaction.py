@@ -5,7 +5,7 @@ import numpy as np
 import embodied
 
 # TODO: client_interface should in gym folder?
-from interaction_dreamerv3.client_interface import ClientInterface
+from client_interface import ClientInterface
 
 # isim env
 class Interaction(embodied.Env):
