@@ -123,7 +123,7 @@ interaction_prediction:
     # from_checkpoint: {checkpointdir/checkpoint.ckpt}
 
   env:
-    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: small_scale, vdi_num: 4, vpi_num: 4, decoder_target: predict, predict_horizen: 20, visualization: False, ghost_visualization: True}   
+    interaction: {port: 5561, state_frame: global, vdi_type: record, loader_type: small_scale, vdi_num: 5, vpi_num: 5, decoder_target: predict, predict_horizen: 20, visualization: False, ghost_visualization: True}   
 
   replay_size: 2e6
 
